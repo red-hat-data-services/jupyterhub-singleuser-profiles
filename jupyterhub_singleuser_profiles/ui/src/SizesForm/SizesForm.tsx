@@ -123,13 +123,6 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
     return values?.map((gpuSize) => <SelectOption key={gpuSize} value={`${gpuSize}`} />);
   }, [uiConfig]);
 
-  const showSizes = sizeOptions && uiConfig.sizeConfig?.enabled !== false;
-  const showGpus = uiConfig.gpuConfig?.enabled !== false;
-
-  if (!showSizes && !showGpus) {
-    return null;
-  }
-
   return (
     <div className="jsp-spawner__option-section">
       <div className="jsp-spawner__option-section__title">Deployment size</div>
@@ -151,7 +144,7 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
           </Select>
         </>
       )}
-      {uiConfig.gpuConfig?.enabled !== false && (
+      {uiConfig.sizeConfig?.enabled !== false && (
         <>
           <div className="jsp-spawner__size_options__title">Number of GPUs</div>
           <Select
