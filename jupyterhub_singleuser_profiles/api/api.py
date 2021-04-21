@@ -52,6 +52,15 @@ def authenticated(f):
 
     return decorated
 
+@app.before_request
+def before_request():
+    if request.is_secure:
+        return
+
+    url = request.url.replace("http://", "https://", 1)
+    code = 301
+    return redirect(url, code=code)
+
 @authenticated
 def whoami(user):
     return Response(
@@ -61,6 +70,12 @@ def whoami(user):
 @authenticated
 def get_user_cm(user):
     cm = _PROFILES.user.get(user['name'])
+    return cm
+
+@authenticated
+def get_ui_config(user):
+    _PROFILES.load_profiles()
+    cm = _PROFILES.get_ui_configuration()
     return cm
 
 @authenticated
@@ -84,6 +99,10 @@ def get_images(*args, **kwargs):
     _PROFILES.load_profiles()
     images = _PROFILES.images.get()
     return images
+
+@authenticated
+def get_image_info(image_name, *args, **kwargs):
+    return _PROFILES.get_image_info(image_name)
 
 @authenticated
 def get_default_image(*args, **kwargs):

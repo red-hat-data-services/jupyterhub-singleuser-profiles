@@ -96,3 +96,27 @@
 ## Release 0.2.2 (2021-03-29T12:36:14)
 ### Improvements
 * Added additional ids in VarForm for selenium tests
+
+## Release 0.2.3 (2021-04-09T18:28:44)
+### Features
+* Only set gpu if the key exists in profile
+
+## Release 0.2.4 (2021-04-13T17:47:36)
+### Features
+* Fix the logic around setting default image
+
+## Release 0.3.0 (2021-04-21T17:38:47)
+### Features
+* Allow getting image detailed info at once
+* Forced https calls
+* Use the cluster GPU count to set UI limits
+* Added generated schemas to swagger
+* add gpu number response
+* Fix the empty-size UI issue
+* Gather image annotation data
+* Testing pydantic library
+* Added ui_config
+
+## Release 0.3.1 (2021-04-21T20:50:54)
+### Features
+* Add api prefix to UI andpoint
