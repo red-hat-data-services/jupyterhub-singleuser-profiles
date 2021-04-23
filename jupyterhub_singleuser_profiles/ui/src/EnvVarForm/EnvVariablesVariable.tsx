@@ -38,17 +38,19 @@ const EnvVariablesVariable: React.FC<EnvVariablesVariableProps> = ({
   };
 
   const validated = variableRow.errors[variable.name] !== undefined ? 'error' : 'default';
+  const idSuffix = variable.name === EMPTY_KEY ? '' : variable.name;
+
   return (
     <div className="jsp-spawner__env-var-form__var-row__vars">
       <FormGroup
-        fieldId={variable.name}
+        fieldId={`KeyForm-${idSuffix}`}
         label="Variable name"
         helperTextInvalid={variableRow.errors[variable.name]}
         helperTextInvalidIcon={<ExclamationCircleIcon />}
         validated={validated}
       >
         <TextInput
-          id={variable.name}
+          id={`KeyForm-${idSuffix}`}
           type={TextInputTypes.text}
           onChange={(newKey) =>
             onUpdateVariable({ name: newKey, type: variable.type, value: variable.value })
@@ -58,13 +60,10 @@ const EnvVariablesVariable: React.FC<EnvVariablesVariableProps> = ({
           onBlur={onBlur}
         />
       </FormGroup>
-      <FormGroup
-        fieldId={`${variable.name}-value`}
-        label="Variable value"
-      >
+      <FormGroup fieldId={`ValueForm-${idSuffix}`} label="Variable value">
         <div className="jsp-spawner__env-var-form__var-row__vars__value">
           <TextInput
-            id={`${variable.name}-value`}
+            id={`ValueForm-${idSuffix}`}
             type={
               showPassword && variableType === 'password'
                 ? TextInputTypes.text

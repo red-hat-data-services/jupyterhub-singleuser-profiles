@@ -108,7 +108,7 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
     };
 
     return sizes.map((size) => (
-      <SelectOption key={size} value={size} description={getDescription(size)} />
+      <SelectOption id={size} key={size} value={size} description={getDescription(size)} />
     ));
   }, [sizeList, sizeDescriptions]);
 
@@ -120,7 +120,9 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
     for (let i = start; i <= end; i++) {
       values.push(i);
     }
-    return values?.map((gpuSize) => <SelectOption key={gpuSize} value={`${gpuSize}`} />);
+    return values?.map((gpuSize) => (
+      <SelectOption id={`gpu-size-${gpuSize}`} key={gpuSize} value={`${gpuSize}`} />
+    ));
   }, [uiConfig]);
 
   const showSizes = sizeOptions && uiConfig.sizeConfig?.enabled !== false;
@@ -139,6 +141,7 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
             Container size
           </div>
           <Select
+            toggleId="SizeDropdownBtn"
             className="jsp-spawner__size_options__select"
             variant={SelectVariant.single}
             isOpen={sizeDropdownOpen}
@@ -155,6 +158,7 @@ const SizesForm: React.FC<ImageFormProps> = ({ uiConfig }) => {
         <>
           <div className="jsp-spawner__size_options__title">Number of GPUs</div>
           <Select
+            toggleId="GpuDropdownBtn"
             className="jsp-spawner__size_options__select"
             variant={SelectVariant.single}
             isOpen={gpuDropdownOpen}

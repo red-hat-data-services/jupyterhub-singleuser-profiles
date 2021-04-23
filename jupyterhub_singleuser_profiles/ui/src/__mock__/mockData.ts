@@ -61,6 +61,47 @@ export const mockData: MockDataType = {
         ],
       },
     },
+    {
+      description:
+        'Jupyter notebook image with a set of data science libraries that advanced AI/ML notebooks will use as a base image to provide a standard for libraries avialable in all notebooks',
+      url: 'https://github.com/thoth-station/s2i-generic-data-science-notebook',
+      display_name: 'Elyra Notebook Image',
+      name: 's2i-lab-elyra:v0.0.6:v0.0.3',
+      content: {
+        software: [
+          {
+            name: 'Python',
+            version: 'v3.8.3',
+          },
+        ],
+        dependencies: [
+          {
+            name: 'Boto3',
+            version: '1.17.11',
+          },
+          {
+            name: 'Kafka-Python',
+            version: '2.0.2',
+          },
+          {
+            name: 'Matplotlib',
+            version: '3.1.3',
+          },
+          {
+            name: 'Numpy',
+            version: '1.20.2',
+          },
+          {
+            name: 'Pandas',
+            version: '1.2.3',
+          },
+          {
+            name: 'Scipy',
+            version: '1.6.2',
+          },
+        ],
+      },
+    },
   ],
   ['size/Small']: {
     name: 'Small',

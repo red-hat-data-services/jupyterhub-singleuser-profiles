@@ -43,6 +43,7 @@ const App: React.FC = () => {
       {uiConfig.envVarConfig?.enabled !== false && <EnvVarForm uiConfig={uiConfig} />}
       <div className="jsp-spawner__buttons-bar">
         <input
+          id="start-server-button"
           type="submit"
           value="Start server"
           className="jsp-spawner__submit-button pf-c-button pf-m-primary"
