@@ -36,7 +36,7 @@ class Images(object):
     def __init__(self, openshift, namespace):
         self.openshift = openshift
         self.namespace = namespace
-
+    
     def get_default(self):
         image_list = self.load()
 
@@ -55,7 +55,7 @@ class Images(object):
 
     def load(self):
         result = []
-        imagestream_list = self.openshift.get_imagestreams(IMAGE_LABEL+'=true')
+        imagestream_list = self.openshift.get_imagestreams(IMAGE_LABEL+'=true')      
 
         for i in imagestream_list.items:
             tag_annotations = {}
@@ -78,5 +78,5 @@ class Images(object):
 
     def get(self):
         result = self.load()
-
+ 
         return [x.dict() for x in result]
