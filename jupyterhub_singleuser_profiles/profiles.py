@@ -242,22 +242,7 @@ class SingleuserProfiles(object):
         if gpu_mode == self.GPU_MODE_PRIVILEGED:
           pod.spec.security_context.privileged = True
 
-      if gpu_types:
-        # We currently do not have a way to select the type of GPU in the notebook spawner
-        # Our workaround for the time being is to apply all possible gpu tolerations
-        if selected_gpu_type == "ALL":
-          for gpu_type in gpu_types:
-            node_tolerations.extend(gpu_type.get('node_tolerations', []))
-        else:
-          for gpu_type in gpu_types:
-            if selected_gpu_type == gpu_type.get('type'):
-              node_tolerations.extend(gpu_type.get('node_tolerations', []))
-              break
-
-    self.apply_pod_schedulers(node_tolerations, node_affinity, pod)
-
     return None
-
 
   @classmethod
   def generate_volume_path(self, mountPath, default_mount_path, volume_name):
