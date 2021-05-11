@@ -13,7 +13,7 @@ DISPLAY_NAME_ANNOTATION = 'opendatahub.io/notebook-image-name'
 URL_ANNOTATION = 'opendatahub.io/notebook-image-url'
 SOFTWARE_ANNOTATION = 'opendatahub.io/notebook-software'
 DEPENDENCIES_ANNOTATION = 'opendatahub.io/notebook-python-dependencies'
-IMAGE_ORDER_ANNOTATION = 'opendatahub.io/notebook-image-order'
+IMAGE_ORDER_ANNOTATION = 'opendatahub.io/image-order'
 
 
 class NameVersionPair(BaseModel):
@@ -30,6 +30,8 @@ class ImageInfo(BaseModel):
     display_name: Optional[str]
     name: str
     content: ImageTagInfo
+    default: bool = False
+    order: int = 100
 
 class Images(object):
     def __init__(self, openshift, namespace):
@@ -59,16 +61,12 @@ class Images(object):
 
         return False
 
-    def get_info(self, image_name):
+    def check_place(self, imagestream):
+        return imagestream.order
+
+    def load(self):
+        result = []
         imagestream_list = self.openshift.get_imagestreams(IMAGE_LABEL+'=true')
-        #abreviations
-        name, tag_name = image_name.split(':')
-        desc = 'opendatahub.io/notebook-image-desc'
-        display_name = 'opendatahub.io/notebook-image-name'
-        url = 'opendatahub.io/notebook-image-url'
-        software = 'opendatahub.io/notebook-software'
-        dependencies = 'opendatahub.io/notebook-python-dependencies'
-        tag_annotations = None
 
         for i in imagestream_list.items:
             if i.metadata.name == name:
@@ -85,42 +83,18 @@ class Images(object):
                                     display_name=annotations.get(display_name),
                                     name=image_name,
                                     content=ImageTagInfo(
-                                        software=json.loads(tag_annotations.get(software, "[]")),\
-                                        dependencies=json.loads(tag_annotations.get(dependencies, "[]"))
-                                    )
-                                ).dict(), 200
-        return "Image not found", 404
+                                        software=json.loads(tag.annotations.get(SOFTWARE_ANNOTATION, "[]")),\
+                                        dependencies=json.loads(tag.annotations.get(DEPENDENCIES_ANNOTATION, "[]"))
+                                    ),
+                                    default=bool(strtobool(annotations.get(DEFAULT_IMAGE_ANNOTATION, "False"))),
+                                    order=int(annotations.get(IMAGE_ORDER_ANNOTATION, 100))
+                                    ))
 
-    def append_option(self, image, result):
-        name = image.metadata.name
-        if not image.status.tags:
-            return
-        for tag in image.status.tags:
-            if not self.tag_exists(tag.tag, image):
-                continue
-            selected = ""
-            image_tag = "%s:%s" % (name, tag.tag)
-            result.append(image_tag)
+        result.sort(key=self.check_place)
 
-    def get(self, detailed=True):
-        images = []
-        code = 200
-        imagestream_list = self.openshift.get_imagestreams(IMAGE_LABEL+'=true')
+        return result
 
-        if len(imagestream_list.items) == 0:
-            self.get_images_legacy(images)
-        else:
-            for i in imagestream_list.items:
-                self.append_option(i, images)
+    def get(self):
+        result = self.load()
 
-        result = []
-        if detailed:
-            for image in images:
-                image_info, code = self.get_info(image)
-                if code == 200:
-                    result.append(image_info)
-        else:
-            result = images
-
-
-        return result, code
+        return [x.dict() for x in result]
