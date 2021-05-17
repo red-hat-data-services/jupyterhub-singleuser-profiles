@@ -7,6 +7,14 @@ from typing import List, Optional
 
 _LOGGER = logging.getLogger(__name__)
 IMAGE_LABEL = 'opendatahub.io/notebook-image'
+DEFAULT_IMAGE_ANNOTATION = 'opendatahub.io/default-image'
+DESCRIPTION_ANNOTATION = 'opendatahub.io/notebook-image-desc'
+DISPLAY_NAME_ANNOTATION = 'opendatahub.io/notebook-image-name'
+URL_ANNOTATION = 'opendatahub.io/notebook-image-url'
+SOFTWARE_ANNOTATION = 'opendatahub.io/notebook-software'
+DEPENDENCIES_ANNOTATION = 'opendatahub.io/notebook-python-dependencies'
+IMAGE_ORDER_ANNOTATION = 'opendatahub.io/notebook-image-order'
+
 
 class NameVersionPair(BaseModel):
     name: str
@@ -27,7 +35,7 @@ class Images(object):
     def __init__(self, openshift, namespace):
         self.openshift = openshift
         self.namespace = namespace
-    
+
 
     def get_images_legacy(self, result):
         """Kept for backwards compatibility"""
@@ -116,5 +124,3 @@ class Images(object):
 
 
         return result, code
-
-
