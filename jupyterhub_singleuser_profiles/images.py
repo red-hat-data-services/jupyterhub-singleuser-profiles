@@ -58,21 +58,36 @@ class Images(object):
         imagestream_list = self.openshift.get_imagestreams(IMAGE_LABEL+'=true')
 
         for i in imagestream_list.items:
-            tag_annotations = {}
-            annotations = i.metadata.annotations
-            for tag in i.spec.tags:
+            annotations = {}
+            if i.metadata.annotations:
+                annotations = i.metadata.annotations
+            imagestream_tags = []
+            if i.spec.tags:
+                imagestream_tags = i.spec.tags
+
+            for tag in imagestream_tags:
                 if not self.tag_exists(tag.name, i):
                     continue
+
+                tag_annotations = {}
+                if tag.annotations:
+                    tag_annotations = tag.annotations
+
+                # Default name if there is no display name annotation
+                imagestream_name = "%s:%s" % (i.metadata.name, tag.name)
+
                 result.append(ImageInfo(description=annotations.get(DESCRIPTION_ANNOTATION),
                                     url=annotations.get(URL_ANNOTATION),
-                                    display_name=annotations.get(DISPLAY_NAME_ANNOTATION),
-                                    name="%s:%s" % (i.metadata.name, tag.name),
+                                    display_name=annotations.get(DISPLAY_NAME_ANNOTATION) or imagestream_name,
+                                    name=imagestream_name,
                                     content=ImageTagInfo(
-                                        software=json.loads(tag.annotations.get(SOFTWARE_ANNOTATION, "[]")),\
-                                        dependencies=json.loads(tag.annotations.get(DEPENDENCIES_ANNOTATION, "[]"))
+                                        software=json.loads(tag_annotations.get(SOFTWARE_ANNOTATION, "[]")),\
+                                        dependencies=json.loads(tag_annotations.get(DEPENDENCIES_ANNOTATION, "[]"))
                                     ),
                                     default=bool(strtobool(annotations.get(DEFAULT_IMAGE_ANNOTATION, "False")))
                                     ))
+
+        result.sort(key=self.check_place)
 
         return result
 
