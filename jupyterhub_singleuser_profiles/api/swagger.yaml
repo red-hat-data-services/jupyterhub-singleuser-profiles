@@ -405,3 +405,14 @@ components:
       - name
       - content
       - recommended
+    Instance:
+      title: Instance
+      type: object
+      properties:
+        name:
+          title: Name
+          type: string
+        cluster_id:
+          title: Cluster ID
+          type: string
+      
