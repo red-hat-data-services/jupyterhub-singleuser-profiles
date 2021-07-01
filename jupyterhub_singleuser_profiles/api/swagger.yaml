@@ -409,8 +409,8 @@ components:
       title: Instance
       type: object
       properties:
-        name:
-          title: Name
+        segment_key:
+          title: Segment key
           type: string
         cluster_id:
           title: Cluster ID
