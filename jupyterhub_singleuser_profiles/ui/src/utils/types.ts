@@ -77,3 +77,28 @@ export type SizeDescription = {
     };
   };
 };
+
+//
+// Used for Telemetry
+//
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    analytics?: any;
+    clusterID?: string;
+  }
+}
+
+export type InstanceType = {
+  segment_key: {
+    segmentKey: string;
+  };
+  cluster_id: string;
+};
+
+export type TrackingEventProperties = {
+  anonymousID?: string;
+  GPU?: number;
+  lastSelectedSize?: string;
+  lastSelectedImage?: string;
+};
