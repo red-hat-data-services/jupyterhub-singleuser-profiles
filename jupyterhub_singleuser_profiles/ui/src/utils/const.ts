@@ -10,3 +10,4 @@ export const IMAGE_PATH = 'images';
 export const DEFAULT_IMAGE_PATH = 'images/default';
 export const UI_CONFIG_PATH = 'ui/config';
 export const SINGLE_SIZE_PATH = 'size';
+export const INSTANCE_PATH = 'instance';
