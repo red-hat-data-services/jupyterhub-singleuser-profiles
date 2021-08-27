@@ -76,6 +76,7 @@ export type SizeDescription = {
       memory: string;
     };
   };
+  schedulable?: boolean;
 };
 
 //
