@@ -1,6 +1,8 @@
 import React from 'react';
 import '@patternfly/patternfly/patternfly.min.css';
+import '@patternfly/patternfly/patternfly-addons.css';
 import {
+  Alert,
   Title,
   EmptyState,
   EmptyStateVariant,
@@ -12,8 +14,8 @@ import { WarningTriangleIcon } from '@patternfly/react-icons';
 import ImageForm from '../ImageForm/ImageForm';
 import SizesForm from '../SizesForm/SizesForm';
 import EnvVarForm from '../EnvVarForm/EnvVarForm';
-import { APIGet, getForUser } from '../utils/APICalls';
-import { CM_PATH, INSTANCE_PATH, UI_CONFIG_PATH } from '../utils/const';
+import { APIGet } from '../utils/APICalls';
+import { CM_PATH, FOR_USER, INSTANCE_PATH, UI_CONFIG_PATH, USER } from '../utils/const';
 import { InstanceType, UiConfigType, UserConfigMapType } from '../utils/types';
 import { fireTrackingEvent, initSegment } from '../utils/segmentIOUtils';
 
@@ -53,10 +55,9 @@ const App: React.FC = () => {
     APIGet(INSTANCE_PATH)
       .then((data: InstanceType) => {
         const { segment_key, cluster_id } = data;
-        const targetUser = getForUser();
-        if (segment_key['segmentKey'] && cluster_id && targetUser) {
+        if (segment_key['segmentKey'] && cluster_id && USER) {
           window.clusterID = data.cluster_id;
-          initSegment({ segmentKey: segment_key['segmentKey'], username: targetUser });
+          initSegment({ segmentKey: segment_key['segmentKey'], username: USER });
         }
       })
       .catch((e) => {
@@ -126,6 +127,13 @@ const App: React.FC = () => {
   return (
     <div className="jsp-spawner">
       <div className="jsp-spawner__header">
+        {FOR_USER ? (
+          <Alert
+            isInline
+            variant="info"
+            title={`This notebook server is being created for ${FOR_USER}`}
+          />
+        ) : null}
         <div className="jsp-spawner__header__title">Start a notebook server</div>
         <div className="jsp-spawner__header__sub-title">
           Select options for your notebook server.
