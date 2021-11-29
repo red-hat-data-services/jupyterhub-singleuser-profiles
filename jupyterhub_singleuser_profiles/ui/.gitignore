@@ -5,7 +5,7 @@
 /build
 
 # Created templates
-/templates
+/templates/admin.html
 
 *stats.json
 

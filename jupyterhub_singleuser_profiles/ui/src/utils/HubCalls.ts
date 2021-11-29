@@ -1,14 +1,13 @@
 import {
   DEV_MODE,
   DEV_SERVER,
-  FOR_USER,
   HUB_PATH,
   MOCK_MODE,
   SHUTDOWN_PATH,
   USER,
   USERS_PATH,
 } from './const';
-import { getMockProgress, mockData } from '../__mock__/mockData';
+import { mockData } from '../__mock__/mockData';
 
 const doSleep = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -22,12 +21,11 @@ export const getHubPath = (request: string): string => {
   return hubPath;
 };
 
-export const getUserHubPath = (request?: string): string =>
-  getHubPath(`users/${FOR_USER || USER}${request ? `/${request}` : ''}`);
+export const getUserHubPath = (request: string): string => getHubPath(`users/${USER}/${request}`);
 
 export const HubUserRequest = (
   method: 'GET' | 'POST' | 'DELETE',
-  target?: string,
+  target: string,
   json?: string,
 ): Promise<Response | null> => {
   const headers = {
@@ -47,7 +45,7 @@ export const HubUserRequest = (
       });
     }
     return doSleep(2000).then(() => {
-      return mockData[target || 'user'];
+      return mockData[target];
     });
   }
   return new Promise((resolve, reject) => {
@@ -59,14 +57,6 @@ export const HubUserRequest = (
       }
     });
   });
-};
-
-export const HubGetSpawnProgress = (): EventSource => {
-  const requestPath = getUserHubPath('server/progress');
-  if (DEV_MODE) {
-    return getMockProgress();
-  }
-  return new EventSource(requestPath);
 };
 
 export const hubRequest = (
