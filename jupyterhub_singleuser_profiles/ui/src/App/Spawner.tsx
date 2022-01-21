@@ -20,7 +20,7 @@ import { HubUserRequest } from '../utils/HubCalls';
 import { APIGet } from '../utils/APICalls';
 import { CM_PATH, FOR_USER, INSTANCE_PATH, UI_CONFIG_PATH, USER } from '../utils/const';
 import { InstanceType, UiConfigType, UserConfigMapType } from '../utils/types';
-import { initSegment } from '../utils/segmentIOUtils';
+import { initSegment, fireTrackingEvent } from '../utils/segmentIOUtils';
 import StartServerModal from './StartServerModal';
 
 import './App.scss';
@@ -83,6 +83,20 @@ const Spawner: React.FC = () => {
       });
   }, []);
 
+  const fireStartServerEvent = () => {
+    APIGet(CM_PATH)
+      .then((data: UserConfigMapType) => {
+        fireTrackingEvent('Notebook Server Started', {
+          GPU: data.gpu,
+          lastSelectedSize: data.last_selected_size,
+          lastSelectedImage: data.last_selected_image,
+        });
+      })
+      .catch((e) => {
+        console.dir(e);
+      });
+  };
+
   const renderContent = () => {
     if (configError) {
       return (
@@ -116,7 +130,10 @@ const Spawner: React.FC = () => {
             variant={ButtonVariant.primary}
             disabled={!imageValid}
             className="jsp-app__spawner__submit-button"
-            onClick={() => setStartShown(true)}
+            onClick={() => {
+              setStartShown(true);
+              fireStartServerEvent();
+            }}
           >
             Start Server
           </Button>
