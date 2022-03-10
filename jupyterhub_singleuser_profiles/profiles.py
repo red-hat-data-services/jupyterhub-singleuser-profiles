@@ -144,7 +144,9 @@ class SingleuserProfiles(object):
     return ui.validate_ui_cm()
   
   def get_instance(self):
-    segment_key = self.openshift.read_secret("rhods-segment-key")
+    segment_key_enabled = self.openshift.read_config_map("rhods-segment-key-config")
+    is_segment_enabled = segment_key_enabled.get("segmentKeyEnabled", "false") == "true"
+    segment_key = self.openshift.read_secret("rhods-segment-key") if is_segment_enabled else {}
     cluster_version = self.openshift.get_cluster_version("version")
     return {
       'segment_key': segment_key,
