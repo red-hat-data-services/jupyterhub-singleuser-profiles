@@ -97,7 +97,7 @@ const ImageForm: React.FC<ImageFormProps> = ({ userConfig, onValidImage }) => {
 
           // Default not set or not found, find the default tag and set it as selected
           const defaultImage = imageList.find(
-            (image) => image.tags?.find((tag) => tag.default) ?? false,
+            (image) => image.tags?.find((tag) => tag.default && isImageTagBuildValid(tag)) ?? false,
           );
           if (defaultImage) {
             const values = {
