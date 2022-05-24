@@ -23,6 +23,11 @@
     color: var(--pf-global--Color--200);
     margin-top: var(--pf-global--spacer--md);
   }
+  &__subtitle2 {
+    font-size: var(--pf-global--FontSize--sm);
+    color: var(--pf-global--Color--200);
+    margin-top: var(--pf-global--spacer--sm);
+  }
   &__title {
     &-version {
       margin-left: var(--pf-global--spacer--xs);

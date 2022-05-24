@@ -132,7 +132,7 @@ const ImageForm: React.FC<ImageFormProps> = ({ userConfig, onValidImage }) => {
   const imageGroup = (imageList: ImageType[], isDefault: boolean) => (
     <>
       <div className="jsp-spawner__image-options__subtitle">
-        {isDefault ? 'Red Hat Maintained' : 'Custom Images'}
+        {isDefault ? <><div>Preloaded Images</div><div className="jsp-spawner__image-options__subtitle2">Preloaded notebook images maintained by Red Hat or independent software vendors.</div></> : 'Custom Images'}
       </div>
       <div className="jsp-spawner__image-options">
         <div className="jsp-spawner__image-options__group">
